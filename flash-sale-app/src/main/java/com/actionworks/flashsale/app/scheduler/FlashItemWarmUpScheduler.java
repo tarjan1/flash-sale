@@ -31,6 +31,7 @@ public class FlashItemWarmUpScheduler {
         pagesQueryCondition.setStockWarmUp(0);
         PageResult<FlashItem> pageResult = flashItemDomainService.getFlashItems(pagesQueryCondition);
         pageResult.getData().forEach(flashItem -> {
+            // 根据配置文件的place_order_type做策略，秒啊
             boolean initSuccess = itemStockCacheService.alignItemStocks(flashItem.getId());
             if (!initSuccess) {
                 logger.info("warmUpFlashItemTask|秒杀品库存已经初始化预热失败", flashItem.getId());

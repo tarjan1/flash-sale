@@ -37,6 +37,7 @@ public class NormalStockCacheService implements ItemStockCacheService {
     private static final String ITEM_STOCKS_CACHE_KEY = "ITEM_STOCKS_CACHE_KEY";
 
     static {
+        // todo 这里用KEYS[2]做了一把锁。可是有必要吗？
         INIT_OR_ALIGN_ITEM_STOCK_LUA = "if (redis.call('exists', KEYS[2]) == 1) then" +
                 "    return -997;" +
                 "end;" +
@@ -91,6 +92,7 @@ public class NormalStockCacheService implements ItemStockCacheService {
         }
         try {
             FlashItem flashItem = flashItemDomainService.getFlashItem(itemId);
+            // 重复判断了吧？
             if (flashItem == null) {
                 logger.info("alignItemStocks|秒杀品不存在|{}", itemId);
                 return false;
